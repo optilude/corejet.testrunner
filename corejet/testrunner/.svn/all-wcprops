@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/collective/!svn/ver/238699/collective.xmltestreport/trunk/collective/xmltestreport
+END
+runner.py
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/collective/!svn/ver/238699/collective.xmltestreport/trunk/collective/xmltestreport/runner.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/collective/!svn/ver/101594/collective.xmltestreport/trunk/collective/xmltestreport/__init__.py
+END
+utils.py
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/collective/!svn/ver/230780/collective.xmltestreport/trunk/collective/xmltestreport/utils.py
+END
+formatter.py
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/collective/!svn/ver/238699/collective.xmltestreport/trunk/collective/xmltestreport/formatter.py
+END
+recipe.py
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/collective/!svn/ver/230784/collective.xmltestreport/trunk/collective/xmltestreport/recipe.py
+END
