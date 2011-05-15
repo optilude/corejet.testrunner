@@ -11,7 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Test runner based on zope.testing.testrunner
+"""Test runner based on zope.testrunner
 """
 import os
 import sys
@@ -87,6 +87,6 @@ def run_internal(defaults=None, args=None, script_parts=None):
     
     # Write Corejet output if --corejet is given
     if runner.options.corejet:
-        runner.options.output.writeCoreJetReports()
+        runner.options.output.writeCoreJetReports(runner.options.corejet)
     
     return runner.failed

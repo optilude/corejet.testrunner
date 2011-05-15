@@ -1,9 +1,16 @@
+import pkg_resources
 import datetime
 import doctest
 import os
 import os.path
+import shutil
 import socket
 import traceback
+
+from zope.dottedname.resolve import resolve
+
+from corejet.core.model import RequirementsCatalogue
+from corejet.visualization import generateReportFromCatalogue
 
 from lxml import etree
 
@@ -145,6 +152,7 @@ class CoreJetOutputFormattingWrapper(object):
         return self.delegate.test_success(test, seconds)
 
     def _record(self, test, seconds, failure=None, error=None):
+        
         try:
             os.getcwd()
         except OSError:
@@ -261,5 +269,100 @@ class CoreJetOutputFormattingWrapper(object):
             outputFile.write(etree.tostring(testSuiteNode, pretty_print=True))
             outputFile.close()
     
-    def writeCoreJetReports(self):
-        pass
+    def writeCoreJetReports(self, source, directory=None, filename='corejet.xml'):
+        
+        sourceType, sourceOptions = source.split(',', 1)
+        
+        functionName = None
+        
+        for ep in pkg_resources.iter_entry_points('corejet.repositorysource'):
+            if ep.name == sourceType and len(ep.attrs) > 0:
+                functionName = "%s.%s" % (ep.module_name, ep.attrs[0],)
+                break
+        
+        if not functionName:
+            raise ValueError("Unknown CoreJet source type %s" % sourceType)
+        
+        sourceFunction = resolve(functionName)
+        repositoryXML = sourceFunction(sourceOptions)
+        
+        catalogue = RequirementsCatalogue()
+        catalogue.populate(repositoryXML)
+        
+        # Set test time
+        catalogue.testTime = datetime.datetime.now()
+        
+        # Find everything we've done so far
+        
+        testedStories = {} # story name -> {scenario name -> (scenario, info)}
+        
+        for suiteInfo in self._testSuites.values():
+            for caseInfo in suiteInfo.testCases:
+                story = caseInfo.test.__class__
+                scenarios = testedStories.setdefault(story.name.strip().lower(), {})
+                
+                # XXX: Relying on _testMethodName here is not very good
+                scenario = getattr(story, caseInfo.test._testMethodName).scenario
+                scenarios[scenario.name.strip().lower()] = (scenario, caseInfo,)
+        
+        # Allocate a status to each scenario
+        for epic in catalogue.epics:
+            for story in epic.stories:
+                
+                testedStory = testedStories.get(story.name.strip().lower(), {})
+                
+                for scenario in story.scenarios:
+                    scenario.status = "pending"
+                    
+                    testedScenario, info = testedStory.get(scenario.name.strip().lower(), (None, None,))
+                    
+                    # Check for pass/fail
+                    if info is not None:
+                        scenario.status = "pass"
+                        if info.failure or info.error:
+                            scenario.status = "fail"
+                        
+                        # Check for mismatch
+                        if (
+                            len(scenario.givens) != len(testedScenario.givens) or
+                            len(scenario.whens) != len(testedScenario.whens) or
+                            len(scenario.thens) != len(testedScenario.thens)
+                        ):
+                            scenario.status = "mismatch"
+                        
+                        if scenario.status != "mismatch":
+                            for left, right in zip(scenario.givens, testedScenario.givens):
+                                if left.text.strip().lower() != right.text.strip().lower():
+                                    scenario.status = "mismatch"
+                                    break
+                        
+                        if scenario.status != "mismatch":
+                            for left, right in zip(scenario.whens, testedScenario.whens):
+                                if left.text.strip().lower() != right.text.strip().lower():
+                                    scenario.status = "mismatch"
+                                    break
+                        
+                        if scenario.status != "mismatch":
+                            for left, right in zip(scenario.thens, testedScenario.thens):
+                                if left.text.strip().lower() != right.text.strip().lower():
+                                    scenario.status = "mismatch"
+                                    break
+        
+        # TODO: We don't handle superfluous tests yet
+        
+        # Prepare output directory
+        if directory is None:
+            workingDir = os.getcwd()
+            directory = os.path.join(workingDir, 'corejet')
+        
+        if os.path.exists(directory):
+            shutil.rmtree(directory)
+            
+        os.mkdir(directory)
+        
+        # Write CoreJet file
+        with open(os.path.join(directory, filename), 'w') as output:
+            catalogue.write(output)
+        
+        # Generate HTML report
+        generateReportFromCatalogue(catalogue, directory)

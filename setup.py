@@ -5,10 +5,11 @@ version = '1.0a1'
 requires = [
     'setuptools',
     'lxml',
-    'zope.testing',
     'zope.testrunner',
     'corejet.core',
+    'corejet.visualization',
     'zc.recipe.egg',
+    'zope.dottedname',
 ]
 
 setup(name='corejet.testrunner',
