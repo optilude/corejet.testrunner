@@ -2,18 +2,18 @@ Introduction
 ============
 
 This package provides an extension to the test runner to the one that ships
-with ``zope.testrunner``, as well as a buildout recipe based on
-``zc.recipe.testrunner`` to install a test script for this test runner.
+with `zope.testrunner`_, as well as a buildout recipe based on
+`zc.recipe.testrunner`_ to install a test script for this test runner.
 
 It is based on (and can be used as a wholesale replacement for),
-``corejet.testrunner``.
+``collective.xmltestreport``.
 
 The test runner is identical to the one in ``zope.testrunner``, except:
 
 * it is capable of writing test reports in the XML format output by JUnit/Ant.
   This allows the test results to be analysed by tools such as the
   Hudson/Jenkins continuous integration server.
-* it can output reports in the CoreJet format
+* it can output reports in the CoreJet XML format - see `corejet.core`_
 
 Usage
 =====
@@ -33,7 +33,7 @@ In your buildout, add a part like this::
         my.package
     defaults = ['--auto-color', '--auto-progress']
 
-The recipe accepts the same options as ``zc.recipe.testrunner``, so look at
+The recipe accepts the same options as `zc.recipe.testrunner`_, so look at
 its documentation for details.
 
 When buildout is run, you should have a script in ``bin/test`` and a directory
@@ -79,3 +79,7 @@ and registered with::
     file = corejet.testrunner.filesource:fileSource
 
 Use ``bin/test --help`` for a full list of options.
+
+.. _zope.testrunner: http://pypi.python.org/pypi/zope.testrunner
+.. _zc.recipe.testrunner: http://pypi.python.org/pypi/zc.recipe.testrunner
+.. _corejet.core: http://pypi.python.org/pypi/corejet.core
