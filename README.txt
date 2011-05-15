@@ -63,12 +63,15 @@ Repository sources
 Other repository sources can be registered via entry points: Packages must
 register an entry point under ``corejet.repositorysource`` identifying a
 callable that is passed the string *after* the comma with a unique name and
-which should return a CoreJet XML file as a stream.
+which should return a ``corejet.core.model.RequirementsCatalogue`` object.
 
 Hence, the ``file`` source is defined as::
 
     def fileSource(path):
-        return open(path)
+        catalogue = RequirementsCatalogue()
+        with open(path) as stream:
+            catalogue.populate(stream)
+        return catalogue
 
 and registered with::
 

@@ -9,7 +9,6 @@ import traceback
 
 from zope.dottedname.resolve import resolve
 
-from corejet.core.model import RequirementsCatalogue
 from corejet.visualization import generateReportFromCatalogue
 
 from lxml import etree
@@ -273,6 +272,13 @@ class CoreJetOutputFormattingWrapper(object):
         
         sourceType, sourceOptions = source.split(',', 1)
         
+        # Prepare output directory
+        if directory is None:
+            workingDir = os.getcwd()
+            directory = os.path.join(workingDir, 'corejet')
+        
+        print "Writing CoreJet report to %s" % directory
+        
         functionName = None
         
         for ep in pkg_resources.iter_entry_points('corejet.repositorysource'):
@@ -284,10 +290,7 @@ class CoreJetOutputFormattingWrapper(object):
             raise ValueError("Unknown CoreJet source type %s" % sourceType)
         
         sourceFunction = resolve(functionName)
-        repositoryXML = sourceFunction(sourceOptions)
-        
-        catalogue = RequirementsCatalogue()
-        catalogue.populate(repositoryXML)
+        catalogue = sourceFunction(sourceOptions)
         
         # Set test time
         catalogue.testTime = datetime.datetime.now()
@@ -349,11 +352,6 @@ class CoreJetOutputFormattingWrapper(object):
                                     break
         
         # TODO: We don't handle superfluous tests yet
-        
-        # Prepare output directory
-        if directory is None:
-            workingDir = os.getcwd()
-            directory = os.path.join(workingDir, 'corejet')
         
         if os.path.exists(directory):
             shutil.rmtree(directory)
