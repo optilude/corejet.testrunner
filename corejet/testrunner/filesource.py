@@ -1,7 +1,6 @@
-from corejet.core.model import RequirementsCatalogue
-
-# python 2.5 compatibility
 from __future__ import with_statement 
+
+from corejet.core.model import RequirementsCatalogue
 
 def fileSource(path):
     """Read a file containing a CoreJet XML document

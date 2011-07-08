@@ -1,3 +1,5 @@
+from __future__ import with_statement 
+
 import pkg_resources
 import datetime
 import doctest
@@ -12,9 +14,6 @@ from zope.dottedname.resolve import resolve
 from corejet.visualization import generateReportFromCatalogue
 
 from lxml import etree
-
-# python 2.5 compatibility
-from __future__ import with_statement 
 
 try:
     import manuel.testing
