@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0a4
+-----
+- Python 2.5 compatibility
+  [jodok]
+
 1.0a3
 -----
 

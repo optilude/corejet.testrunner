@@ -13,6 +13,9 @@ from corejet.visualization import generateReportFromCatalogue
 
 from lxml import etree
 
+# python 2.5 compatibility
+from __future__ import with_statement 
+
 try:
     import manuel.testing
     HAVE_MANUEL = True
