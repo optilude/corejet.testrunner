@@ -1,3 +1,5 @@
+from __future__ import with_statement 
+
 from corejet.core.model import RequirementsCatalogue
 
 def fileSource(path):

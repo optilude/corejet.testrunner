@@ -1,3 +1,5 @@
+from __future__ import with_statement 
+
 import pkg_resources
 import datetime
 import doctest
