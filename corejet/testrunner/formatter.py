@@ -323,9 +323,10 @@ class CoreJetOutputFormattingWrapper(object):
                     
                     # Check for pass/fail
                     if info is not None:
-                        scenario.status = "pass"
                         if info.failure or info.error:
                             scenario.status = "fail"
+                        else:
+                            scenario.status = "pass"
                         
                         # Init 'global' steps when they are missing
                         setattr(story, "givens", getattr(story, "givens", []))
