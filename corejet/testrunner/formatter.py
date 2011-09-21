@@ -327,6 +327,11 @@ class CoreJetOutputFormattingWrapper(object):
                         if info.failure or info.error:
                             scenario.status = "fail"
                         
+                        # Init 'global' steps when they are missing
+                        setattr(story, "givens", getattr(story, "givens", []))
+                        setattr(story, "thens", getattr(story, "thens", []))
+                        setattr(story, "givens", getattr(story, "givens", []))
+
                         # Check for mismatch
                         if (
                             len(story.givens + scenario.givens) != len(testedScenario.givens) or
