@@ -329,26 +329,29 @@ class CoreJetOutputFormattingWrapper(object):
                         
                         # Check for mismatch
                         if (
-                            len(scenario.givens) != len(testedScenario.givens) or
-                            len(scenario.whens) != len(testedScenario.whens) or
-                            len(scenario.thens) != len(testedScenario.thens)
+                            len(story.givens + scenario.givens) != len(testedScenario.givens) or
+                            len(story.whens + scenario.whens) != len(testedScenario.whens) or
+                            len(story.thens + scenario.thens) != len(testedScenario.thens)
                         ):
                             scenario.status = "mismatch"
                         
                         if scenario.status != "mismatch":
-                            for left, right in zip(scenario.givens, testedScenario.givens):
+                            for left, right in zip(story.givens + scenario.givens,
+                                                   testedScenario.givens):
                                 if left.text.strip().lower() != right.text.strip().lower():
                                     scenario.status = "mismatch"
                                     break
                         
                         if scenario.status != "mismatch":
-                            for left, right in zip(scenario.whens, testedScenario.whens):
+                            for left, right in zip(story.whens + scenario.whens,
+                                                   testedScenario.whens):
                                 if left.text.strip().lower() != right.text.strip().lower():
                                     scenario.status = "mismatch"
                                     break
                         
                         if scenario.status != "mismatch":
-                            for left, right in zip(scenario.thens, testedScenario.thens):
+                            for left, right in zip(story.thens + scenario.thens,
+                                                   testedScenario.thens):
                                 if left.text.strip().lower() != right.text.strip().lower():
                                     scenario.status = "mismatch"
                                     break
