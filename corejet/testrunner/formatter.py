@@ -303,6 +303,8 @@ class CoreJetOutputFormattingWrapper(object):
         
         for suiteInfo in self._testSuites.values():
             for caseInfo in suiteInfo.testCases:
+                if not hasattr(caseInfo.test.__class__, "name"):
+                    continue
                 story = caseInfo.test.__class__
                 scenarios = testedStories.setdefault(story.name.strip().lower(), {})
                 
