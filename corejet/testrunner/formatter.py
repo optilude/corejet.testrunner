@@ -272,7 +272,12 @@ class CoreJetOutputFormattingWrapper(object):
     
     def writeCoreJetReports(self, source, directory=None, filename='corejet.xml'):
         
-        sourceType, sourceOptions = source.split(',', 1)
+        try:
+            sourceType, sourceOptions = source.split(',', 1)
+        except ValueError:
+            # need more than 1 value to unpack
+            sourceType = source.strip()
+            sourceOptions = ''
         
         # Prepare output directory
         if directory is None:
