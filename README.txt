@@ -2,8 +2,7 @@ Introduction
 ============
 
 This package provides an extension to the test runner to the one that ships
-with `zope.testrunner`_, as well as a buildout recipe based on
-`zc.recipe.testrunner`_ to install a test script for this test runner.
+with `zope.testrunner`_.
 
 It is based on (and can be used as a wholesale replacement for),
 ``collective.xmltestreport``.
@@ -28,13 +27,13 @@ In your buildout, add a part like this::
     ...
 
     [test]
-    recipe = corejet.testrunner
+    recipe = corejet.recipe.testrunner
     eggs =
         my.package
     defaults = ['--auto-color', '--auto-progress']
 
-The recipe accepts the same options as `zc.recipe.testrunner`_, so look at
-its documentation for details.
+The recipe (`corejet.recipe.testrunner`_) accepts the same options as
+`zc.recipe.testrunner`_, so look at its documentation for details.
 
 When buildout is run, you should have a script in ``bin/test`` and a directory
 ``parts/test``.
@@ -80,6 +79,7 @@ and registered with::
 
 Use ``bin/test --help`` for a full list of options.
 
+.. _corejet.recipe.testrunner: http://pypi.python.org/pypi/corejet.recipe.testrunner
 .. _zope.testrunner: http://pypi.python.org/pypi/zope.testrunner
 .. _zc.recipe.testrunner: http://pypi.python.org/pypi/zc.recipe.testrunner
 .. _corejet.core: http://pypi.python.org/pypi/corejet.core

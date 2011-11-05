@@ -1,6 +1,13 @@
 Changelog
 =========
 
+- Fixed to allow requirements-sources with no options
+  [datakurre]
+- Fixed to work with test-suites containing non-corejet-tests
+  [datakurre]
+- Added support for story-level steps
+  [datakurre]
+
 1.0a4
 -----
 
