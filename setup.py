@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '1.0a4'
+version = '1.0.0'
 
 requires = [
     'setuptools',
@@ -35,7 +35,7 @@ setup(name='corejet.testrunner',
       entry_points="""
       [zc.buildout]
       default = corejet.testrunner.recipe:TestRunner
-      
+
       [corejet.repositorysource]
       file = corejet.testrunner.filesource:fileSource
       """,
