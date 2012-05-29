@@ -2,6 +2,10 @@ Changelog
 =========
 
 
+- Fixed non-corejet-test check to rely on adaptation instead of magic.
+  [datakurre]
+
+
 1.0.0 (2012-05-26)
 ------------------
 
