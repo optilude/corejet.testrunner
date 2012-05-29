@@ -11,6 +11,7 @@ import traceback
 
 from zope.dottedname.resolve import resolve
 
+from corejet.core.interfaces import IStory
 from corejet.visualization import generateReportFromCatalogue
 
 from lxml import etree
@@ -271,6 +272,13 @@ class CoreJetOutputFormattingWrapper(object):
             outputFile.close()
     
     def writeCoreJetReports(self, source, directory=None, filename='corejet.xml'):
+
+        # corejet.robot registers CoreJet-adapters for Robot Framework tests
+        # XXX: there should be a more dynamic way to configure plugin adapters
+        try:
+            import corejet.robot
+        except ImportError:
+            pass
         
         try:
             sourceType, sourceOptions = source.split(',', 1)
@@ -308,15 +316,19 @@ class CoreJetOutputFormattingWrapper(object):
         
         for suiteInfo in self._testSuites.values():
             for caseInfo in suiteInfo.testCases:
-                if not hasattr(caseInfo.test.__class__, "name"):
+                # look up the story for the test through adaptation:
+                # - for @story-decorated test, the class implements IStory
+                # - for others, the test case may have an adapter for IStory
+                story = IStory(caseInfo.test,
+                               IStory(caseInfo.test.__class__, None))
+                if not story:
                     continue
-                story = caseInfo.test.__class__
                 scenarios = testedStories.setdefault(story.name.strip().lower(), {})
                 
                 # XXX: Relying on _testMethodName here is not very good
                 scenario = getattr(story, caseInfo.test._testMethodName).scenario
                 scenarios[scenario.name.strip().lower()] = (scenario, caseInfo,)
-        
+
         # Allocate a status to each scenario
         for epic in catalogue.epics:
             for story in epic.stories:
