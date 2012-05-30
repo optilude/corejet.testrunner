@@ -2,7 +2,10 @@ Changelog
 =========
 
 
-- Fixed non-corejet-test check to rely on adaptation instead of magic.
+1.0.1 (2012-05-30)
+------------------
+
+- Fixed the check for non-corejet tests to rely on adaptation instead of magic.
   [datakurre]
 
 
